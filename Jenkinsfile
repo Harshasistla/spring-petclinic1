@@ -16,7 +16,10 @@ pipeline {
         }
         stage('build'){
             steps{
-                sh 'mvn clean'
+                sh 'mvn clean package'
+                withSonarQubeEnv(installationName: 'SONAR_CLOUD', credentialsId: 'SONAR_CLOUD') {
+                   sh  'mvn clean verify sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=testakhil -Dsonar.projectKey=testakhil_test'
+                }
             }
         }
     }
